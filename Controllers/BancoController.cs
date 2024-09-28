@@ -32,7 +32,19 @@ namespace PC2.Controllers
             return View();
         }
 
-
+        // Acción para manejar el registro de un banco
+        [HttpPost("Create")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Bancos banco)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(banco);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index)); // Redirigimos al listado
+            }
+            return View(banco);
+        }
         [HttpGet("Error")]
         public IActionResult Error()
         {
