@@ -1,0 +1,38 @@
+@model IEnumerable<PC2.Models.Bancos>
+
+<h2>Listado de Bancos</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre Titular</th>
+            <th>Tipo de Cuenta</th>
+            <th>Saldo Inicial</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            <table>
+                @foreach (var banco in Model)
+                {
+                    <tr>
+                        <td>@banco.Id</td>
+                        <td>@banco.NombreTitular</td>
+                        <td>@banco.TipoCuenta</td>
+                        <td>@banco.SaldoInicial</td>
+                        <td>@banco.Email</td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <p>No hay registros de bancos disponibles.</p>
+        }
+    </tbody>
+</table>
+
+<a href="/Banco/Create" class="btn btn-primary">Agregar Nuevo Banco</a>

@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PC2.Models;
 using PC2.Data;
-using Microsoft.AspNetCore.Mvc;
 
 namespace PC2.Controllers
 {
@@ -12,18 +9,31 @@ namespace PC2.Controllers
     public class BancoController : Controller
     {
         private readonly ILogger<BancoController> _logger;
+        private readonly ApplicationDbContext _context; // Agregamos el contexto de la base de datos
 
-        public BancoController(ILogger<BancoController> logger)
+        public BancoController(ILogger<BancoController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context; // Inyectamos el contexto
         }
 
-        public IActionResult Index()
+        // Acción para mostrar el listado de bancos
+        [HttpGet("")]
+        public async Task<IActionResult> Index()
+        {
+            var bancos = await _context.DataBanco.ToListAsync();
+            return View(bancos); // Pasamos la lista de bancos a la vista
+        }
+
+        // Acción para mostrar el formulario de registro
+        [HttpGet("Create")]
+        public IActionResult Create()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+
+        [HttpGet("Error")]
         public IActionResult Error()
         {
             return View("Error!");
