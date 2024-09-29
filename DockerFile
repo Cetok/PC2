@@ -1,30 +1,18 @@
-# Usa una imagen base de .NET SDK 8.0 para construir la aplicación
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
 
-# Copia el archivo .csproj y restaura las dependencias
-COPY *.csproj ./
+COPY .csproj ./
 RUN dotnet restore
 
-# Copia todo el contenido del proyecto y construye la aplicación
 COPY . ./
 RUN dotnet publish -c Release -o out
 
-# Usa una imagen más ligera de ASP.NET Core para ejecutar la aplicación
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-
-# Copia los archivos publicados desde la fase de construcción
 COPY --from=build-env /app/out .
 
-# Establece la variable de entorno para tu aplicación
-ENV ASPNETCORE_URLS=http://+:80
+#CAMBIAR AQUI EL NOMBRE DEL APLICATIVO
+#nombre de tu app busca en bin\Release**\netcore5.0\plantitas.exe
+ENV APP_NET_CORE PC2.dll 
 
-# Expone el puerto que utilizará la aplicación
-EXPOSE 80
-
-# Cambia esto al nombre de tu archivo .dll (debería ser el nombre de tu proyecto principal)
-ENV APP_NET_CORE="PC2.dll"
-
-# Ejecuta la aplicación
-CMD ["dotnet", "$APP_NET_CORE"]
+CMD ASPNETCORE_URLS=http://:$PORT dotnet $APP_NET_CORE
